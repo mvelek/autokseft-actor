@@ -86,79 +86,79 @@ router.addHandler("detail", async ({ request, page, log, pushData }) => {
         }
     }
 
-    const psubParametryElement = await page.evaluate(() => {
-        const element = document.querySelector(".psubParametry");
-        if (element) {
-            return Array.from(element.querySelectorAll("tr"), (el) => {
-                const key = el.querySelector("td:nth-child(1)");
-                const value = el.querySelector("td:nth-child(2)");
-                if (key?.textContent == "EAN:") {
-                    let m = {};
-                    return `EAN**${value?.textContent}`;
-                }
-                return;
-            }).filter((n) => n);
-        }
-        return;
-    });
+    // const psubParametryElement = await page.evaluate(() => {
+    //     const element = document.querySelector(".psubParametry");
+    //     if (element) {
+    //         return Array.from(element.querySelectorAll("tr"), (el) => {
+    //             const key = el.querySelector("td:nth-child(1)");
+    //             const value = el.querySelector("td:nth-child(2)");
+    //             if (key?.textContent == "EAN:") {
+    //                 let m = {};
+    //                 return `EAN**${value?.textContent}`;
+    //             }
+    //             return;
+    //         }).filter((n) => n);
+    //     }
+    //     return;
+    // });
     // console.log(psubParametryElement);
 
     // add concurent numbers
-    const concurentCodes = await page.evaluate(async () => {
-        const element = document.querySelector(".block.concurent_codes");
-        if (element) {
-            let lastBrand;
-            return Array.from(
-                element.querySelectorAll("span.span_row"),
-                (el) => {
-                    let data = {};
-                    const brand = el.querySelector("span.crit_name ");
-                    data.brand = brand?.textContent || lastBrand;
-                    lastBrand = brand?.textContent || lastBrand;
+    // const concurentCodes = await page.evaluate(async () => {
+    //     const element = document.querySelector(".block.concurent_codes");
+    //     if (element) {
+    //         let lastBrand;
+    //         return Array.from(
+    //             element.querySelectorAll("span.span_row"),
+    //             (el) => {
+    //                 let data = {};
+    //                 const brand = el.querySelector("span.crit_name ");
+    //                 data.brand = brand?.textContent || lastBrand;
+    //                 lastBrand = brand?.textContent || lastBrand;
 
-                    const concurentCode = el.querySelector("span.crit_value ");
-                    console.log(concurentCode.textContent);
-                    data.concurentCode = concurentCode.textContent;
-                    return data;
-                }
-            );
-        }
-        return;
-    });
+    //                 const concurentCode = el.querySelector("span.crit_value ");
+    //                 console.log(concurentCode.textContent);
+    //                 data.concurentCode = concurentCode.textContent;
+    //                 return data;
+    //             }
+    //         );
+    //     }
+    //     return;
+    // });
 
     // add oem numbers
-    const oemCodes = await page.evaluate(async () => {
-        const element = document.querySelector(".block.oe-numbers-block");
-        if (element) {
-            let lastBrand;
-            return Array.from(
-                element.querySelectorAll("span.span_row"),
-                (el) => {
-                    let data = {};
-                    const brand = el.querySelector("span.crit_name ");
-                    data.brand = brand?.textContent || lastBrand;
-                    lastBrand = brand?.textContent || lastBrand;
+    // const oemCodes = await page.evaluate(async () => {
+    //     const element = document.querySelector(".block.oe-numbers-block");
+    //     if (element) {
+    //         let lastBrand;
+    //         return Array.from(
+    //             element.querySelectorAll("span.span_row"),
+    //             (el) => {
+    //                 let data = {};
+    //                 const brand = el.querySelector("span.crit_name ");
+    //                 data.brand = brand?.textContent || lastBrand;
+    //                 lastBrand = brand?.textContent || lastBrand;
 
-                    const oemCode = el.querySelector("span.crit_value ");
-                    data.oemCode = oemCode.textContent;
-                    return data;
-                }
-            );
-        }
-        return;
-    });
+    //                 const oemCode = el.querySelector("span.crit_value ");
+    //                 data.oemCode = oemCode.textContent;
+    //                 return data;
+    //             }
+    //         );
+    //     }
+    //     return;
+    // });
 
     // console.log(oemCodes);
     // add spare parts numbers
-    const sparePartsProducts = await page.evaluate(async () => {
-        return Array.from(
-            document.querySelectorAll("li.spareparts_product"),
-            (el) => {
-                const artnr = el.querySelector(".artnr ");
-                return artnr.textContent;
-            }
-        );
-    });
+    // const sparePartsProducts = await page.evaluate(async () => {
+    //     return Array.from(
+    //         document.querySelectorAll("li.spareparts_product"),
+    //         (el) => {
+    //             const artnr = el.querySelector(".artnr ");
+    //             return artnr.textContent;
+    //         }
+    //     );
+    // });
 
     // save product data
     // add prod info
@@ -179,42 +179,42 @@ router.addHandler("detail", async ({ request, page, log, pushData }) => {
 
     // save oem codes data
     // add product code to each record
-    if (concurentCodes) {
-        for (const codeItem of concurentCodes) {
-            await pushData(
-                {
-                    code: prodInfo.code,
-                    manufacturer: codeItem.brand,
-                    concurentCode: codeItem.concurentCode,
-                },
-                "autokseft-concurent-codes"
-            );
-        }
-    }
+    // if (concurentCodes) {
+    //     for (const codeItem of concurentCodes) {
+    //         await pushData(
+    //             {
+    //                 code: prodInfo.code,
+    //                 manufacturer: codeItem.brand,
+    //                 concurentCode: codeItem.concurentCode,
+    //             },
+    //             "autokseft-concurent-codes"
+    //         );
+    //     }
+    // }
 
     // add product code to each record
-    if (oemCodes) {
-        for (const codeItem of oemCodes) {
-            await pushData(
-                {
-                    code: prodInfo.code,
-                    manufacturer: codeItem.brand,
-                    oemCode: codeItem.oemCode,
-                },
-                "autokseft-oem-codes"
-            );
-        }
-    }
+    // if (oemCodes) {
+    //     for (const codeItem of oemCodes) {
+    //         await pushData(
+    //             {
+    //                 code: prodInfo.code,
+    //                 manufacturer: codeItem.brand,
+    //                 oemCode: codeItem.oemCode,
+    //             },
+    //             "autokseft-oem-codes"
+    //         );
+    //     }
+    // }
 
-    if (sparePartsProducts) {
-        for (const artNr of sparePartsProducts) {
-            await pushData(
-                {
-                    code: prodInfo.code,
-                    spareCode: artNr,
-                },
-                "autokseft-spare-parts"
-            );
-        }
-    }
+    // if (sparePartsProducts) {
+    //     for (const artNr of sparePartsProducts) {
+    //         await pushData(
+    //             {
+    //                 code: prodInfo.code,
+    //                 spareCode: artNr,
+    //             },
+    //             "autokseft-spare-parts"
+    //         );
+    //     }
+    // }
 });
